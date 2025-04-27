@@ -22,7 +22,7 @@ import redis.clients.jedis.Jedis
 object ConnHelper extends Serializable{
   // 懒变量定义，使用的时候才初始化
   lazy val jedis = new Jedis("localhost")
-  lazy val mongoClient = MongoClient(MongoClientURI("mongodb://localhost:27017/recommender"))
+  lazy val mongoClient = MongoClient(MongoClientURI("mongodb://root:example@localhost:27017/recommender"))
 }
 
 case class MongoConfig( uri: String, db: String )
@@ -46,7 +46,7 @@ object OnlineRecommender {
   def main(args: Array[String]): Unit = {
     val config = Map(
       "spark.cores" -> "local[*]",
-      "mongo.uri" -> "mongodb://localhost:27017/recommender",
+      "mongo.uri" -> "mongodb://root:example@localhost:27017/recommender",
       "mongo.db" -> "recommender",
       "kafka.topic" -> "recommender"
     )
