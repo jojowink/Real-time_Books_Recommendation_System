@@ -1,6 +1,7 @@
 package com.atguigu.business.utils;
 
 import com.mongodb.MongoClient;
+import com.mongodb.MongoClientURI;
 import org.elasticsearch.client.transport.TransportClient;
 import org.elasticsearch.common.settings.Settings;
 import org.elasticsearch.common.transport.InetSocketTransportAddress;
@@ -34,9 +35,18 @@ public class Configure {
             Properties properties = new Properties();
             Resource resource = new ClassPathResource("recommend.properties");
             properties.load(new FileInputStream(resource.getFile()));
+            // 优先从环境变量获取Mongo配置
+            String envMongoHost = System.getenv("SPRING_DATA_MONGODB_HOST");
+            String envMongoPort = System.getenv("SPRING_DATA_MONGODB_PORT");
             this.mongoHost = properties.getProperty("mongo.host");
             this.mongoPort = Integer.parseInt(properties.getProperty("mongo.port"));
+            // 覆盖为环境变量
+            if (envMongoHost != null && !envMongoHost.isEmpty()) this.mongoHost = envMongoHost;
+            if (envMongoPort != null && !envMongoPort.isEmpty()) this.mongoPort = Integer.parseInt(envMongoPort);
+            // 优先从环境变量获取Redis配置
+            String envRedisHost = System.getenv("SPRING_REDIS_HOST");
             this.redisHost = properties.getProperty("redis.host");
+            if (envRedisHost != null && !envRedisHost.isEmpty()) this.redisHost = envRedisHost;
         } catch (FileNotFoundException e) {
             e.printStackTrace();
             System.exit(0);
@@ -47,9 +57,14 @@ public class Configure {
     }
 
     @Bean(name = "mongoClient")
-    public MongoClient getMongoClient(){
-        MongoClient mongoClient = new MongoClient( mongoHost , mongoPort );
-        return mongoClient;
+    public MongoClient getMongoClient() {
+        String uri = String.format(
+            "mongodb://root:example@%s:%d/recommender?authSource=admin",
+            mongoHost,
+            mongoPort
+        );
+        System.out.println("MongoDB URI: " + uri);
+        return new MongoClient(new MongoClientURI(uri));
     }
 
     @Bean(name = "transportClient")
