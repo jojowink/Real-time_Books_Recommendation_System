@@ -89,6 +89,8 @@ services:
       - "41414:41414"
     depends_on:
       - kafka-local
+    volumes:
+      - tomcat_logs:/logs
 
   spark-local:
     image: bitnami/spark:latest
@@ -124,6 +126,8 @@ services:
       - SPRING_DATA_MONGODB_PORT=27017
       - SPRING_REDIS_HOST=redis-local
       - ES_HOST=elasticsearch
+    volumes:
+      - tomcat_logs:/usr/local/tomcat/logs
 
   azkaban:
     image: rea1shane/azkaban-solo-server:3.90.0
@@ -138,3 +142,4 @@ volumes:
     driver: local
   spark_data:
     driver: local
+  tomcat_logs:
