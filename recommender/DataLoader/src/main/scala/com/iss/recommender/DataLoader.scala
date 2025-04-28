@@ -36,7 +36,7 @@ case class MongoConfig( uri: String, db: String )
 
 object DataLoader {
   // 定义数据文件路径
-  val PRODUCT_DATA_PATH = "recommender/DataLoader/src/main/resources/products.csv"
+  val PRODUCT_DATA_PATH = "recommender/DataLoader/src/main/resources/products_cleaned.csv"
   val RATING_DATA_PATH = "recommender/DataLoader/src/main/resources/ratings.csv"
   // 定义mongodb中存储的表名
   val MONGODB_PRODUCT_COLLECTION = "Product"
@@ -59,7 +59,7 @@ object DataLoader {
     val productRDD = spark.sparkContext.textFile(PRODUCT_DATA_PATH)
     val productDF = productRDD.map( item => {
       // product数据通过^分隔，切分出来
-      val attr = item.split("\\^")
+      val attr = item.split("\\^", -1)
       // 转换成Product
       Product( attr(0).toInt, attr(1).trim, attr(4).trim, attr(5).trim, attr(6).trim )
     } ).toDF()
