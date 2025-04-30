@@ -12,6 +12,7 @@ package com.atguigu.kafkastream;
 import org.apache.kafka.streams.KafkaStreams;
 import org.apache.kafka.streams.StreamsConfig;
 import org.apache.kafka.streams.processor.TopologyBuilder;
+import org.apache.kafka.streams.processor.WallclockTimestampExtractor;
 
 import java.util.Properties;
 
@@ -34,6 +35,8 @@ public class Application {
         Properties settings = new Properties();
         settings.put(StreamsConfig.APPLICATION_ID_CONFIG, "logFilter");
         settings.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, brokers);
+        settings.put(StreamsConfig.TIMESTAMP_EXTRACTOR_CLASS_CONFIG,
+                    WallclockTimestampExtractor.class);
         settings.put(StreamsConfig.ZOOKEEPER_CONNECT_CONFIG, zookeepers);
 
         // 创建kafka stream 配置对象
