@@ -66,7 +66,7 @@ services:
       - 'redis_data:/bitnami/redis/data'
 
   mongo-local:
-    image: circleci/mongo
+    image: mongo:4.4
     container_name: mongo-local
     ports:
       - "27017:27017"

@@ -1,4 +1,5 @@
-FROM maven:3.6.3-jdk-8 AS builder
+# FROM maven:3.6.3-jdk-8 AS builder
+FROM --platform=linux/amd64 maven:3.6.3-openjdk-8 AS builder
 WORKDIR /app
 
 COPY . .
