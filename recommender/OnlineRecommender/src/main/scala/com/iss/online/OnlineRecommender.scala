@@ -9,6 +9,7 @@ import org.apache.spark.streaming.kafka010.{ConsumerStrategies, KafkaUtils, Loca
 import org.apache.spark.streaming.{Seconds, StreamingContext}
 import redis.clients.jedis.Jedis
 
+
 // 定义一个连接助手对象，建立到redis和mongodb的连接
 object ConnHelper extends Serializable{
   // 懒变量定义，使用的时候才初始化
@@ -115,8 +116,8 @@ object OnlineRecommender {
   }
 
   /**
-   * 从redis里获取最近num次评分
-   */
+    * 从redis里获取最近num次评分
+    */
   import scala.collection.JavaConversions._
   def getUserRecentlyRatings(num: Int, userId: Int, jedis: Jedis): Array[(Int, Double)] = {
     // 从redis中用户的评分队列里获取评分数据，list键名为uid:USERID，值格式是 PRODUCTID:SCORE
@@ -177,10 +178,10 @@ object OnlineRecommender {
 
     // 根据公式计算所有的推荐优先级，首先以productId做groupby
     scores.groupBy(_._1).map{
-        case (productId, scoreList) =>
-          ( productId, scoreList.map(_._2).sum/scoreList.length + log(increMap.getOrDefault(productId, 1)) - log(decreMap.getOrDefault(productId, 1)) )
-      }
-      // 返回推荐列表，按照得分排序
+      case (productId, scoreList) =>
+        ( productId, scoreList.map(_._2).sum/scoreList.length + log(increMap.getOrDefault(productId, 1)) - log(decreMap.getOrDefault(productId, 1)) )
+    }
+    // 返回推荐列表，按照得分排序
       .toArray
       .sortWith(_._2>_._2)
   }
@@ -206,7 +207,7 @@ object OnlineRecommender {
     // 按照userId查询并更新
     streamRecsCollection.findAndRemove( MongoDBObject( "userId" -> userId ) )
     streamRecsCollection.insert( MongoDBObject( "userId" -> userId,
-      "recs" -> streamRecs.map(x=>MongoDBObject("productId"->x._1, "score"->x._2)) ) )
+                                  "recs" -> streamRecs.map(x=>MongoDBObject("productId"->x._1, "score"->x._2)) ) )
   }
 
 }
