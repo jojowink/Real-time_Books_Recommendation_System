@@ -30,7 +30,7 @@ public class ProductRestApi {
     private RatingService ratingService;
 
     /**
-     * 获取热门推荐
+     * 获取hot recommendations
      * @param model
      * @return
      */
@@ -127,7 +127,7 @@ public class ProductRestApi {
         return model;
     }
 
-    // 离线推荐
+    // off-line recommendations
     @RequestMapping(value = "/offline", produces = "application/json", method = RequestMethod.GET )
     @ResponseBody
     public Model getOfflineProducts(@RequestParam("username")String username,@RequestParam("num")int num, Model model) {
@@ -138,7 +138,7 @@ public class ProductRestApi {
         return model;
     }
 
-    // 实时推荐
+    // real time recommendations
     @RequestMapping(value = "/stream", produces = "application/json", method = RequestMethod.GET )
     @ResponseBody
     public Model getStreamProducts(@RequestParam("username")String username,@RequestParam("num")int num, Model model) {

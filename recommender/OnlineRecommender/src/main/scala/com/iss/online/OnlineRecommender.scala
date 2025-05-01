@@ -100,7 +100,7 @@ object OnlineRecommender {
           // 2. 从相似度矩阵中获取当前书籍最相似的书籍列表，作为备选列表，保存成一个数组Array[productId]
           val candidateProducts = getTopSimProducts( MAX_SIM_PRODUCTS_NUM, productId, userId, simProcutsMatrixBC.value )
 
-          // 3. 计算每个备选书籍的推荐优先级，得到当前用户的实时推荐列表，保存成 Array[(productId, score)]
+          // 3. 计算每个备选书籍的推荐优先级，得到当前用户的real time recommendations列表，保存成 Array[(productId, score)]
           val streamRecs = computeProductScore( candidateProducts, userRecentlyRatings, simProcutsMatrixBC.value )
 
           // 4. 把推荐列表保存到mongodb
