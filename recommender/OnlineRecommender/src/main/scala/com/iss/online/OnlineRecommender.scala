@@ -13,7 +13,7 @@ import redis.clients.jedis.Jedis
 // 定义一个连接助手对象，建立到redis和mongodb的连接
 object ConnHelper extends Serializable{
   // 懒变量定义，使用的时候才初始化
-  lazy val jedis = new Jedis("localhost")
+  lazy val jedis = new Jedis("localhost", 6379)
   lazy val mongoClient = MongoClient(MongoClientURI("mongodb://root:example@localhost:27017/recommender"))
 }
 
